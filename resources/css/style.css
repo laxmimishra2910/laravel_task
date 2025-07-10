@@ -1,0 +1,246 @@
+
+/* Fix table styling */
+#employeeTable {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 15px;
+}
+
+#employeeTable th,
+#employeeTable td {
+  text-align: left;
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+#employeeTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#employeeTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+/* Only make Actions column flex */
+#employeeTable td.actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+ .employee-photo {
+        width: 90px;
+        height: 75px;
+        object-fit:fill;
+        border-radius: 50%;
+        border: 2px solid #ddd;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+/*projecttable*/
+
+/* Fix table styling */
+#projectTable {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 15px;
+}
+
+#projectTable th,
+#projectTable td {
+  text-align: left;
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+#projectTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#projectTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+/* Flex group for buttons */
+/* .actions-btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+.actions-btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+.actions-btn {
+  padding: 6px 12px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  border: none !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease, transform 0.2s ease !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+} */
+
+/*feedback*/
+
+/* Fix table styling */
+#feedbackTable {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 15px;
+}
+
+#feedbackTable th,
+#feedbackTable td {
+  text-align: left;
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+#feedbackTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#feedbackTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+
+
+    /*form styling*/
+
+
+
+/* Container */
+h2 {
+    margin-top: 35px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 25px;
+    font-size: 30px;
+    color: #333;
+}
+/* Main form wrapper */
+.form-wrapper {
+  max-width: 650px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffffcc;
+  border-radius: 20px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(8px);
+  font-family: 'Segoe UI', sans-serif;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Form heading */
+.form-wrapper h2 {
+  text-align: center;
+  font-size: 28px;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+/* Label styling */
+.form-wrapper label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+/* Input fields */
+.form-wrapper input[type="text"],
+.form-wrapper input[type="email"],
+.form-wrapper input[type="number"],
+.form-wrapper input[type="file"] {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  margin-bottom: 15px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Focus effect */
+.form-wrapper input:focus {
+  border-color: #3f8efc;
+  box-shadow: 0 0 0 4px rgba(63, 142, 252, 0.15);
+  outline: none;
+}
+
+/* File input special look */
+.form-wrapper input[type="file"] {
+  border: 1px dashed #ccc;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.form-wrapper input[type="file"]:hover {
+  border-color: #3f8efc;
+}
+
+/* Submit button */
+
+.form-wrapper input[type="submit"] {
+  width: 100%;
+  background-color: #3f8efc;
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.form-wrapper button:hover {
+  background-color: #1e6fde;
+  transform: translateY(-2px);
+}
+
+/* Error messages */
+.text-red-600 {
+  color: #e3342f;
+  font-size: 13px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* Image preview */
+/* .employee-photo {
+  width: 100px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 10px auto;
+} */
+
+/* Responsive styles */
+@media (max-width: 600px) {
+  .form-wrapper {
+    padding: 20px;
+  }
+
+  .form-wrapper h2 {
+    font-size: 22px;
+  }
+
+  .form-wrapper input,
+  .form-wrapper button {
+    font-size: 14px;
+  }
+}

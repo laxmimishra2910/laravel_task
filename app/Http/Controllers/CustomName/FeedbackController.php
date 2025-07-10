@@ -14,6 +14,10 @@ class FeedbackController extends Controller
      */
    public function index(Request $request) {
 
+      if (!has_role('admin', 'employee')) {
+        return view('unauthorized'); // Custom view with alert
+    }
+
          if ($request->ajax()) {
         $data = Feedback::latest()->get();
         return DataTables::of($data)

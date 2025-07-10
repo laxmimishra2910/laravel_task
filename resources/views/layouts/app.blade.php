@@ -44,7 +44,7 @@
 @isset($slot)
     <main>
         <div class="container mt-3">
-            <x-alert />
+           
         </div>
 
         {{ $slot }}

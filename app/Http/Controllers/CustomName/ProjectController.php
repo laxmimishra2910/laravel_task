@@ -13,6 +13,9 @@ class ProjectController extends Controller
      * Display a listing of the resource.
      */
     public function index() {
+          if (!has_role('admin', 'hr')) {
+        return view('unauthorized'); // Custom view with alert
+    }
         $projects = Project::all();
         return view('projects.index', compact('projects'));
     }

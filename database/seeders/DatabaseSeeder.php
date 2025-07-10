@@ -27,9 +27,9 @@ class DatabaseSeeder extends Seeder
       Employee::factory()->count(500)->create();
 
  
-    Role::firstOrCreate(['name' => 'admin']);
-    Role::firstOrCreate(['name' => 'hr']);
-    Role::firstOrCreate(['name' => 'employee']);
+    // Role::firstOrCreate(['name' => 'admin']);
+    // Role::firstOrCreate(['name' => 'hr']);
+    // Role::firstOrCreate(['name' => 'employee']);
 
     }
 }

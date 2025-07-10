@@ -1,23 +1,17 @@
 <x-app-layout>
-    @if(session('success'))
-    <x-alert type="success">
-        {{ session('success') }}
-    </x-alert>
-@endif
-
-@if(session('error'))
-    <x-alert type="danger">
-        {{ session('error') }}
-    </x-alert>
+   
+ 
 <div class="container mt-4">
     <h2><u>Employee List</u></h2>
-    
 </div>
+
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
+
+    
       
-<<div class="mt-4 flex flex-wrap gap-3 items-center">
+<div class="mt-4 flex flex-wrap gap-3 items-center">
     <a href="{{ route('dashboard') }}" class="btn btn-secondary">
         Back
     </a>

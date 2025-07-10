@@ -23,24 +23,18 @@ Route::middleware('auth')->group(function () {
 // Admin-only routes
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('projects', ProjectController::class); // Full access
-    Route::resource('feedback', FeedbackController::class);
+   Route::resource('feedback', FeedbackController::class)->only(['index', 'create', 'store', 'destroy']);
     Route::get('feedback-report', [FeedbackController::class, 'report'])->name('feedback.report');
 
 });
 
 // HR-only or Admin (shared) routes
-Route::middleware(['auth', 'role:hr,admin'])->group(function () {
-    Route::resource('employees', EmployeeController::class);
-    Route::get('projects', [ProjectController::class, 'index'])->name('projects.index'); // HR only view
-});
+Route::middleware('auth')->group(function () {
+  Route::resource('employees', EmployeeController::class);
+Route::resource('projects', ProjectController::class);
+Route::resource('feedback', FeedbackController::class)->only(['index', 'create', 'store', 'destroy']);
+Route::get('feedback-report', [FeedbackController::class, 'report'])->name('feedback.report');
 
-// Employee-only routes
-Route::middleware(['auth', 'role:employee'])->group(function () {
-    // View projects (limited access)
-    Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');
-
-    // View personal feedback
-    Route::get('feedback', [FeedbackController::class, 'index'])->name('feedback.index');
 });
 
 // Soft delete management (admin or hr)

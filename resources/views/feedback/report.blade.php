@@ -4,10 +4,10 @@
         
     </x-slot>
 <div class="container">
-    <h2>Feedback Summary</h2>
+    <h2><u>Feedback Summary</u></h2>
   <a href="{{ route('feedback.index') }}" class="btn btn-secondary">Back</a>
     @if($report->count())
-        <ul class="list-group">
+        <ul class="list-group mt-4">
             @foreach($report as $rating => $count)
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     {{ $rating }}

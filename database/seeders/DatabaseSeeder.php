@@ -20,16 +20,18 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-         $this->call([ UserSeeder::class,]);
+        
+
+
+         $this->call([
+        RoleSeeder::class,   // ✅ FIRST create roles
+        UserSeeder::class,   // ✅ THEN create users and assign roles
+    ]);
         $this->call([ ProjectSeeder::class,]);
 
      Feedback::factory()->count(500)->create();
       Employee::factory()->count(500)->create();
 
  
-    // Role::firstOrCreate(['name' => 'admin']);
-    // Role::firstOrCreate(['name' => 'hr']);
-    // Role::firstOrCreate(['name' => 'employee']);
-
     }
 }

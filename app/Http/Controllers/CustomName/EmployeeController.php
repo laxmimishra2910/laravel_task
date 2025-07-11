@@ -8,6 +8,8 @@ use App\Models\Employee;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use App\Jobs\SendWelcomeEmailJob;
+
 
 
 class EmployeeController extends Controller
@@ -36,8 +38,11 @@ class EmployeeController extends Controller
         $validated['photo'] = $photopath;
     }
 
-    Employee::create($validated);
-    return redirect()->route('employees.index')->with('success', 'Data added');
+    $employee = Employee::create($validated);
+    // dd($request->email, $employee);
+      SendWelcomeEmailJob::dispatch($employee);
+
+    return redirect()->route('employees.index')->with('message', 'Employee created. Email will be sent');
 }
 
     public function show(string $id)
@@ -79,7 +84,7 @@ public function destroy(string $id)
     {
         $employee=Employee::findOrFail($id);
         $employee->delete();
-         return redirect()->route('employees.index')->with('success', 'Data updated successfully');
+         return redirect()->route('employees.index')->with('success', 'Data deleted successfully');
 
     }
 public function trashed()

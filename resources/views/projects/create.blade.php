@@ -17,6 +17,7 @@
     @endif
 
     <form action="{{ route('projects.store') }}" method="POST">
+        @csrf
         @include('projects._form')
     </form>
 </div>

@@ -21,6 +21,7 @@
     @endif
 
     <form action="{{ route('feedback.store') }}" method="POST">
+        @csrf
         @include('feedback._form')
     </form>
 </div>

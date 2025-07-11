@@ -15,6 +15,7 @@
     @endif
 
     <form action="{{ route('projects.update', $project->id) }}" method="POST">
+        @csrf
         @include('projects._form', ['project' => $project])
     </form>
 </div>

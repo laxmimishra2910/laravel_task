@@ -19,6 +19,7 @@
 
         {{-- Form Starts --}}
         <form action="{{ route('employees.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
             @include('employees._form')
 
         </form>

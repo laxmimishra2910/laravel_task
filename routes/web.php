@@ -36,12 +36,14 @@ Route::resource('feedback', FeedbackController::class)->only(['index', 'create',
 Route::get('feedback-report', [FeedbackController::class, 'report'])->name('feedback.report');
 
 });
-
+Route::get('feedback-create', [FeedbackController::class,'create'])->name('feedback.create');
 // Soft delete management (admin or hr)
 Route::middleware(['auth', 'role:admin,hr'])->group(function () {
     Route::get('/employees/trashed', [EmployeeController::class, 'show'])->name('employees.trashed');
     Route::post('/employees/restore/{id}', [EmployeeController::class, 'restore'])->name('employees.restore');
     Route::delete('/employees/force-delete/{id}', [EmployeeController::class, 'forceDelete'])->name('employees.forceDelete');
 });
+
+
 
 require __DIR__.'/auth.php';

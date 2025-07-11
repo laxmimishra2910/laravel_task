@@ -10,28 +10,71 @@ use Illuminate\Support\Facades\Log;
 
 class Employee extends Model
 {
-    use SoftDeletes , HasFactory;
+    use SoftDeletes, HasFactory;
 
-    public $incrementing=false;
-    protected $keyType='String';
-    
-    protected $fillable=[
-        'name','email','phone','position','salary','photo'
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    protected $fillable = [
+        'name', 'email', 'phone', 'position', 'salary', 'photo'
     ];
-   protected static function booted()
+
+    protected static function booted()
     {
-        static::creating(function ($employee) {
-            $employee->id = (string) Str::uuid(); // Auto UUID
+        // Event: retrieved
+        static::retrieved(function ($employee) {
+            Log::info("Employee retrieved: {$employee->id}");
         });
 
+        // Event: creating
+        static::creating(function ($employee) {
+            $employee->id = (string) Str::uuid(); // Auto-generate UUID
+            Log::info("Employee is being created with ID: {$employee->id}");
+        });
+
+        // Event: created
+        static::created(function ($employee) {
+            Log::info("Employee created: {$employee->id}");
+        });
+
+        // Event: saving (before create or update)
+        static::saving(function ($employee) {
+            Log::info("Employee saving: {$employee->id}");
+        });
+
+        // Event: saved (after create or update)
+        static::saved(function ($employee) {
+            Log::info("Employee saved: {$employee->id}");
+        });
+
+        // Event: updating
         static::updating(function ($employee) {
+            Log::info("Employee is being updated: {$employee->id}");
+        });
+
+        // Event: updated
+        static::updated(function ($employee) {
             Log::info("Employee updated: {$employee->id}");
         });
 
+        // Event: deleting
         static::deleting(function ($employee) {
+            Log::warning("Employee is being deleted: {$employee->id}");
+        });
+
+        // Event: deleted
+        static::deleted(function ($employee) {
             Log::warning("Employee deleted: {$employee->id}");
         });
+
+        // Event: restoring (for soft deletes)
+        static::restoring(function ($employee) {
+            Log::notice("Employee is being restored: {$employee->id}");
+        });
+
+        // Event: restored
+        static::restored(function ($employee) {
+            Log::notice("Employee restored: {$employee->id}");
+        });
     }
-
-
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
+use App\Events\ProjectCreated;
 
 class ProjectController extends Controller
 {
@@ -32,8 +33,10 @@ class ProjectController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
+          
+        $project = Project::create($validated);
+        event(new ProjectCreated($project));
 
-        Project::create($validated);
         return redirect()->route('projects.index')->with('success', 'Project created!');
     }
 

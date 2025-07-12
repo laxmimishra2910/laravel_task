@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Employee extends Model
 {
@@ -18,6 +19,16 @@ class Employee extends Model
     protected $fillable = [
         'name', 'email', 'phone', 'position', 'salary', 'photo'
     ];
+    
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function projects()
+{
+    return $this->belongsToMany(Project::class);
+}
 
     protected static function booted()
     {

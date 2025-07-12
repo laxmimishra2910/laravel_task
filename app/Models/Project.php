@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Project extends Model
 {
@@ -15,5 +16,10 @@ class Project extends Model
         'start_date',
         'end_date',
     ];
+
+    public function employees()
+{
+    return $this->belongsToMany(Employee::class);
+}
     
 }

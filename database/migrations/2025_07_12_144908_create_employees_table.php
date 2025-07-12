@@ -19,10 +19,16 @@ return new class extends Migration
             $table->string('position');
             $table->decimal('salary', 10, 2);
             $table->string('photo')->nullable(); // Optional image field
-            // In create_employees_table.php or a new migration
+            $table->uuid('department_id'); // ✅ Add the column first
+            $table->foreign('department_id')
+            ->references('id')->on('departments')
+            ->onDelete('cascade');
             $table->softDeletes(); // Adds `deleted_at` column
             $table->timestamps();
+            // $table->engine = 'InnoDB'; 
         });
+
+      
     }
 
     /**
@@ -30,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employee');
+        Schema::dropIfExists('employees');
     }
 };

@@ -17,6 +17,7 @@ class ProjectController extends Controller
           if (!has_role('admin', 'hr')) {
         return view('unauthorized'); // Custom view with alert
     }
+         $projects = Project::with('employees')->get();
         $projects = Project::all();
         return view('projects.index', compact('projects'));
     }

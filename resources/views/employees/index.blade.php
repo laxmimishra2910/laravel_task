@@ -32,7 +32,10 @@
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Position</th>
+                <th>Department</th>
                 <th>Salary</th>
+                <th>PF (12%)</th>
+                <th>Net Salary</th>
                  <th>Photo</th>
                 <th>Actions</th>
             </tr>
@@ -44,8 +47,10 @@
                     <td>{{ $emp->email }}</td>
                     <td>{{ $emp->phone }}</td>
                     <td>{{ $emp->position }}</td>
-                   
+                    <td>{{ $emp->department->name ?? 'N/A' }}</td> {{-- ✅ added --}}
                     <td>₹{{ number_format($emp->salary, 2) }}</td>
+                    <td>₹{{ number_format($emp->pf, 2) }}</td>
+                     <td>₹{{ number_format($emp->net_salary, 2) }}</td>
                     <td>
                      @if($emp->photo)
                         <img src="{{ asset('storage/' . $emp->photo) }}" alt="Employee Image" width="100" class="employee-photo">

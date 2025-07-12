@@ -18,19 +18,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        
-
-
          $this->call([
-        RoleSeeder::class,   // ✅ FIRST create roles
-        UserSeeder::class,   // ✅ THEN create users and assign roles
+        RoleSeeder::class,
+        UserSeeder::class,
+        ProjectSeeder::class,
     ]);
-        $this->call([ ProjectSeeder::class,]);
 
-     Feedback::factory()->count(500)->create();
-      Employee::factory()->count(500)->create();
+    Feedback::factory()->count(500)->create();
+    Employee::factory()->count(500)->create();
+
+    // ✅ Attach employees to projects
+    $this->call([
+        EmployeeProjectSeeder::class,
+    ]);
 
  
     }

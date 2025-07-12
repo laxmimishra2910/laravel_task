@@ -61,6 +61,11 @@
   background-color: #f2f2f2;
   font-weight: bold;
 }
+#projectTable td.actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
 
 /* Flex group for buttons */
 /* .actions-btn-group {

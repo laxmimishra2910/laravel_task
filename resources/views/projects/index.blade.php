@@ -9,21 +9,29 @@
     <table id='projectTable' >
         <thead>
             <tr>
+               
                 <th>Project Name</th>
                 <th>Status</th>
                 <th>Start Date</th>
                 <th>End Date</th>
+                 <th>Employees</th> <!-- ✅ Added -->
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($projects as $project)
             <tr>
+                 
                 <td>{{ $project->project_name }}</td>
                 <td>{{ $project->status }}</td>
                 <td>{{ $project->start_date }}</td>
                 <td>{{ $project->end_date }}</td>
                 <td>
+                @foreach($project->employees as $emp)
+                    <span class="badge bg-info">{{ $emp->name }}</span>
+                @endforeach
+                </td>
+                <td class="actions">
                     <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-warning  btn-sm ">Edit</a>
                     <form action="{{ route('projects.destroy', $project->id) }}" method="POST" class="d-inline">
                         @csrf @method('DELETE')

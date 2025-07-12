@@ -19,7 +19,13 @@ class EmployeeController extends Controller
           if (!has_role('admin', 'hr')) {
         return view('unauthorized'); // Custom view with alert
     }
+     $employees = Employee::with('department')->get(); // 👈 Load department with employee
         $employees = Employee::all();
+            foreach ($employees as $employee) {
+        $employee->pf = round($employee->salary * 0.12, 2); // 12% PF deduction
+        $employee->net_salary = round($employee->salary - $employee->pf, 2); // Actual amount received
+    }
+
         return view('employees.index', compact('employees'));
     }
 

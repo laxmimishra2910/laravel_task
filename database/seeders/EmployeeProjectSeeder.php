@@ -18,10 +18,11 @@ class EmployeeProjectSeeder extends Seeder
         $employees = Employee::all();
         $projects = Project::all();
 
-        foreach ($employees as $employee) {
-            $employee->projects()->attach(
-                $projects->random(2)->pluck('id')->toArray()
-            );
+          foreach ($employees as $employee) {
+            if ($projects->count() > 0) {
+                $randomProjects = $projects->shuffle()->take(min(2, $projects->count()))->pluck('id')->toArray();
+                $employee->projects()->attach($randomProjects);
+            }
         }
     }
     }

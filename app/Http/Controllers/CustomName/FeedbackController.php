@@ -18,19 +18,21 @@ class FeedbackController extends Controller
         return view('unauthorized'); // Custom view with alert
     }
 
-         if ($request->ajax()) {
-        $data = Feedback::latest()->get();
-        return DataTables::of($data)
-            ->addColumn('action', function ($row) {
-    return '<form action="' . route('feedback.destroy', $row->id) . '" method="POST" onsubmit="return confirm(\'Delete this feedback?\')" style="display:inline;">
-                ' . csrf_field() . method_field('DELETE') . '
-                <button class="btn btn-danger btn-sm">Delete</button>
-            </form>';
-        })
-            ->rawColumns(['action']) // Allow HTML
-            ->make(true);
-    }
-        $feedbacks = Feedback::latest()->get();
+        if ($request->ajax()) {
+        $feedbacks = Feedback::with('employee')->select('feedback.*');
+
+       return DataTables::of($feedbacks)
+    ->addColumn('employee_name', function ($feedback) {
+        return $feedback->employee->name ?? 'N/A';
+    })
+    ->addColumn('action', function ($feedback) {
+        return view('feedback.partials.action-button', compact('feedback'))->render();
+    })
+    ->rawColumns(['action'])
+    ->make(true);
+}
+
+       $feedbacks = Feedback::with('employee')->latest()->get(); // ✅ only one query
         return view('feedback.index', compact('feedbacks'));
     }
 

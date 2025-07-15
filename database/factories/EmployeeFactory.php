@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Department;
+use App\Models\Tenant;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Employee>
@@ -19,7 +20,9 @@ class EmployeeFactory extends Factory
     public function definition(): array
     {
         return [
-              'id' => Str::uuid(),
+            'id' => (string) Str::uuid(),
+             // ✅ Correct: creates a tenant and assigns its ID
+            'tenant_id' => Tenant::factory()->create()->id,
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
             'phone' => $this->faker->phoneNumber,
@@ -28,7 +31,7 @@ class EmployeeFactory extends Factory
             'photo' => 'image/default.png', // ✅ Set a default image
              'department_id' => Department::factory(),
         ];
-    }
+    } 
 
     public function configure()
     {

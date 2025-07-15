@@ -17,9 +17,12 @@ class Employee extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'name', 'email', 'phone', 'position', 'salary', 'photo'
+        'name', 'email', 'phone', 'position', 'salary', 'photo','tenant_id'
     ];
-    
+    public function tenant()
+{
+    return $this->belongsTo(Tenant::class);
+}
     public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class);
@@ -30,18 +33,43 @@ class Employee extends Model
     return $this->belongsToMany(Project::class);
 }
 
+    public function feedbacks()
+{
+    return $this->hasMany(Feedback::class);
+}
+
+
+        
+
     protected static function booted()
     {
+       static::creating(function ($employee) {
+
+        if (!$employee->id) {
+            $employee->id = (string) Str::uuid();
+        }
+        
+    if (app()->bound('tenant_id')) {
+        $employee->tenant_id = app('tenant_id');
+    }
+});
+
+
+    static::addGlobalScope('tenant', function ($query) {
+    if (app()->bound('tenant_id')) {
+        $query->where('tenant_id', app('tenant_id'));
+    }
+});
         // Event: retrieved
         static::retrieved(function ($employee) {
             Log::info("Employee retrieved: {$employee->id}");
         });
 
         // Event: creating
-        static::creating(function ($employee) {
-            $employee->id = (string) Str::uuid(); // Auto-generate UUID
-            Log::info("Employee is being created with ID: {$employee->id}");
-        });
+        // static::creating(function ($employee) {
+        //     $employee->id = (string) Str::uuid(); // Auto-generate UUID
+        //     Log::info("Employee is being created with ID: {$employee->id}");
+        // });
 
         // Event: created
         static::created(function ($employee) {

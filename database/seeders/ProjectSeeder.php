@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Faker\Factory as Faker;
+use App\Models\Tenant;
 
 class ProjectSeeder extends Seeder
 {
@@ -16,6 +17,9 @@ class ProjectSeeder extends Seeder
     public function run(): void
     {
               $faker = Faker::create();
+               // ✅ Get an existing tenant (or create one if none exists)
+    $tenantId = Tenant::first()->id ?? Tenant::factory()->create()->id;
+
 
         $projects = [
             ['Website Redesign', 'Revamping an outdated company website to improve UX/UI and SEO.'],
@@ -32,6 +36,7 @@ class ProjectSeeder extends Seeder
 
         foreach ($projects as $project) {
             DB::table('projects')->insert([
+                'tenant_id' => $tenantId, // ✅ required
                 'project_name' => $project[0],
                 'description' => $project[1],
                 'status' => $faker->randomElement(['Pending', 'In Progress', 'Completed']),

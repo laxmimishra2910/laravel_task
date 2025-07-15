@@ -25,6 +25,7 @@
   <table id="feedbackTable" class="table table-bordered table-striped">
         <thead>
             <tr>
+                <th>Employee</th> <!-- ✅ New -->
                 <th>Name</th>
                 <th>Email</th>
                 <th>Message</th>
@@ -36,6 +37,7 @@
         <tbody>
             @foreach ($feedbacks as $feedback)
             <tr>
+                <td>{{ $feedback->employee->name ?? 'N/A' }}</td>
                 <td>{{ $feedback->client_name }}</td>
                 <td>{{ $feedback->email }}</td>
                 <td>{{ $feedback->message }}</td>
@@ -69,6 +71,7 @@
                 serverSide: true,
                 ajax: "{{ route('feedback.index') }}",
                 columns: [
+                    { data: 'employee_name', name: 'employee.name' },
                     { data: 'client_name', name: 'client_name' },
                     { data: 'email', name: 'email' },
                     { data: 'message', name: 'message' },

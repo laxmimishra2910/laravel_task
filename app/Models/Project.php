@@ -21,5 +21,19 @@ class Project extends Model
 {
     return $this->belongsToMany(Employee::class);
 }
+
+    protected static function booted()
+{
+    static::addGlobalScope('tenant', function ($query) {
+        if ($tenantId = app('tenant_id')) {
+            $query->where('tenant_id', $tenantId);
+        }
+    });
+
+    static::creating(function ($employee) {
+        $employee->tenant_id = app('tenant_id');
+    });
+}
+
     
 }

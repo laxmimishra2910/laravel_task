@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('employees', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+             $table->uuid('id')->primary();
+             $table->unsignedBigInteger('tenant_id');
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone');
@@ -25,6 +26,7 @@ return new class extends Migration
             ->onDelete('cascade');
             $table->softDeletes(); // Adds `deleted_at` column
             $table->timestamps();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             // $table->engine = 'InnoDB'; 
         });
 

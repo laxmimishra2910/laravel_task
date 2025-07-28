@@ -6,37 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-use App\Traits\LogsFeedback;
+use App\Traits\LogsModelEvents;
+ use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+
 
 
 class Feedback extends Model
 {       
-    use HasFactory,LogsFeedback ;
+    use HasFactory,LogsModelEvents,HasUuids ;
+    
+     protected $keyType = 'string'; // Because UUIDs are strings
+    public $incrementing = false;  // UUIDs are not auto-incremented
       
-        protected $fillable = ['client_name', 'email', 'message', 'rating'];
-      
-    public function tenant()
-         {
-             return $this->belongsTo(Tenant::class);
-         }
-     public function employee()
-         {
-             return $this->belongsTo(Employee::class);
-         }
-
-         protected static function booted()
+        protected $fillable = ['employee_id','client_name', 'email', 'message', 'rating' ];
+        public function employee()
 {
-    static::addGlobalScope('tenant', function ($query) {
-        if ($tenantId = app('tenant_id')) {
-            $query->where('tenant_id', $tenantId);
-        }
-    });
-
-    static::creating(function ($employee) {
-        $employee->tenant_id = app('tenant_id');
-    });
+    return $this->belongsTo(Employee::class);
 }
 
- 
 
 }

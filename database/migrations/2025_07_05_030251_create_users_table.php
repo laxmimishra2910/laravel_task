@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -19,6 +20,10 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+           
+    // $table->unsignedBigInteger('company_id'); // ✅ MUST BE unsignedBigInteger
+    // $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -47,3 +52,4 @@ return new class extends Migration
         Schema::dropIfExists('sessions');
     }
 };
+

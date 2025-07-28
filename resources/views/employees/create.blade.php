@@ -20,8 +20,8 @@
         {{-- Form Starts --}}
         <form action="{{ route('employees.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @include('employees._form')
-
+          
+     @include('employees._form', ['formFields' => $formFields])
         </form>
     </div>
 </x-app-layout>

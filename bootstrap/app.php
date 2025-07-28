@@ -16,9 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
       $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class, // ✅ register 'role' middleware
         ]);
-          $middleware->append([
-            'role' => \App\Http\Middleware\TenantMiddleware::class, // ✅ register 'role' middleware
-        ]);
+         
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

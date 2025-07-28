@@ -1,47 +1,63 @@
 <div class="form-wrapper">
-@csrf
-<div class="mb-3">
-    <label>Name:</label>
-    <input type="text" name="name" class="form-control" value="{{ old('name', $employee->name ?? '') }}" required>
-</div>
+    @csrf
 
-<div class="mb-3">
-    <label>Email:</label>
-    <input type="email" name="email" class="form-control" value="{{ old('email', $employee->email ?? '') }}" required>
-</div>
+    @if (isset($formFields) && is_array($formFields))
+        @foreach ($formFields as $field)
+            <div class="mb-4">
+                <label for="{{ $field['name'] }}" class="block text-sm font-medium text-gray-700">
+                    {{ $field['label'] }}
+                </label>
 
-<div class="mb-3">
-    <label>Phone:</label>
-    <input type="text" name="phone" class="form-control" value="{{ old('phone', $employee->phone ?? '') }}" required>
-</div>
+                {{-- SELECT FIELD --}}
+                @if ($field['type'] === 'select')
+                    @php
+                        $options = $field['options'] ?? [];
+                        $selectedValue = old($field['name'], $data[$field['name']] ?? '');
+                    @endphp
 
-<div class="mb-3">
-    <label>Position:</label>
-    <input type="text" name="position" class="form-control" value="{{ old('position', $employee->position ?? '') }}" required>
-</div>
-
-<div class="mb-3">
-    <label>Salary:</label>
-    <input type="number" name="salary" class="form-control" step="0.01" value="{{ old('salary', $employee->salary ?? '') }}" required>
-</div>
-<div class="mb-3">
-    <label>photo:</label>
-    <input type="file" name="photo" class="form-control">
-</div>
-   <div class="mt-3 d-flex gap-2">
-        <button type="submit" class="btn btn-primary">Add Employee</button>
-        <a href="{{ route('employees.index') }}" class="btn btn-secondary">Back</a>
-    </div>
-
-</div>
-
-{{-- Show preview if editing and image exists --}}
-@if(!empty($employee->photo))
-    <div class="mb-3">
-        <img src="{{ asset('storage/' . $employee->photo) }}" alt="Employee Image" width="120" class="img-thumbnail">
-    </div>
-@endif
+                   <select name="department_id" class="form-select" required>
+    <option value="">-- Select Department --</option>
+    @foreach($departments as $department)
+        <option value="{{ $department->id }}" {{ old('department_id') == $department->id ? 'selected' : '' }}>
+            {{ $department->name }}
+        </option>
+    @endforeach
+</select>
 
 
+                {{-- FILE FIELD --}}
+                @elseif ($field['type'] === 'file')
+                    <input type="file" name="{{ $field['name'] }}" id="{{ $field['name'] }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                           {{ $field['required'] ? 'required' : '' }}>
 
+                {{-- OTHER INPUTS --}}
+                @else
+                    <input
+                        type="{{ $field['type'] }}"
+                        name="{{ $field['name'] }}"
+                        id="{{ $field['name'] }}"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                        placeholder="{{ $field['placeholder'] ?? '' }}"
+                        value="{{ old($field['name'], $data[$field['name']] ?? '') }}"
+                        {{ $field['required'] ? 'required' : '' }}
+                        @if(isset($field['step'])) step="{{ $field['step'] }}" @endif
+                    >
+                @endif
+
+                @error($field['name'])
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+        @endforeach
+
+        {{-- Submit Button --}}
+        <div class="mt-6">
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                {{ isset($data) ? 'Update' : 'Save' }}
+            </button>
+        </div>
+    @else
+        <p class="text-red-500">No form fields configured.</p>
+    @endif
 </div>

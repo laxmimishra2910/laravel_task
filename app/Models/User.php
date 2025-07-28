@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+ use App\Models\Scopes\TenantScope;
+
 
 class User extends Authenticatable
 {
@@ -22,6 +24,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+       
+
     ];
     protected $attributes = [
     'role' => 'employee',
@@ -56,5 +60,8 @@ class User extends Authenticatable
             $user->assignRole('employee');
         }
     });
+   
 }
+
+
 }

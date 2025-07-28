@@ -1,30 +1,66 @@
+<div class="form-wrapper">
+    @csrf
+    @php
+        $formFields = config('form.feedback_form');
+    @endphp
 
+    @foreach ($formFields as $field)
+        <div class="mb-4">
+            <label for="{{ $field['name'] }}" class="block font-semibold">
+                {{ $field['label'] }}
+            </label>
 
-@csrf
-<div class="mb-3">
-    <label for="client_name">Name</label>
-    <input type="text" name="client_name" class="form-control" value="{{ old('client_name', $feedback->client_name ?? '') }}" required>
+            {{-- Handle employee_id separately --}}
+            @if ($field['name'] === 'employee_id' && $field['type'] === 'select')
+                <select name="employee_id" id="employee_id" class="w-full border rounded p-2" required>
+                    <option value="">-- Select Employee --</option>
+                    @foreach ($employees as $employee)
+                        <option value="{{ $employee->id }}" {{ old('employee_id') == $employee->id ? 'selected' : '' }}>
+                            {{ $employee->name }}
+                        </option>
+                    @endforeach
+                </select>
+
+            {{-- Handle regular select fields like rating --}}
+            @elseif ($field['type'] === 'select')
+                <select
+                    name="{{ $field['name'] }}"
+                    id="{{ $field['name'] }}"
+                    class="w-full border rounded p-2"
+                    @if ($field['required']) required @endif
+                >
+                    <option value="">-- Select --</option>
+                    @foreach ($field['options'] as $optionValue => $optionLabel)
+                        <option value="{{ $optionValue }}" {{ old($field['name']) == $optionValue ? 'selected' : '' }}>
+                            {{ $optionLabel }}
+                        </option>
+                    @endforeach
+                </select>
+
+            @elseif ($field['type'] === 'textarea')
+                <textarea
+                    name="{{ $field['name'] }}"
+                    id="{{ $field['name'] }}"
+                    class="w-full border rounded p-2"
+                    placeholder="{{ $field['placeholder'] ?? '' }}"
+                    @if ($field['required']) required @endif
+                >{{ old($field['name']) }}</textarea>
+
+            @else
+                <input
+                    type="{{ $field['type'] }}"
+                    name="{{ $field['name'] }}"
+                    id="{{ $field['name'] }}"
+                    value="{{ old($field['name']) }}"
+                    placeholder="{{ $field['placeholder'] ?? '' }}"
+                    class="w-full border rounded p-2"
+                    @if ($field['required']) required @endif
+                />
+            @endif
+        </div>
+    @endforeach
+
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
+        Submit
+    </button>
 </div>
-
-<div class="mb-3">
-    <label for="email">Email (optional)</label>
-    <input type="email" name="email" class="form-control" value="{{ old('email', $feedback->email ?? '') }}">
-</div>
-
-<div class="mb-3">
-    <label for="message">Message</label>
-    <textarea name="message" class="form-control" required>{{ old('message', $feedback->message ?? '') }}</textarea>
-</div>
-
-<div class="mb-3">
-    <label for="rating">Rating</label>
-    <select name="rating" class="form-select" required>
-        @foreach(['Excellent', 'Good', 'Average', 'Poor'] as $rate)
-            <option value="{{ $rate }}" {{ old('rating', $feedback->rating ?? '') == $rate ? 'selected' : '' }}>
-                {{ $rate }}
-            </option>
-        @endforeach
-    </select>
-</div>
-
-<button type="submit" class="btn btn-success">Submit Feedback</button>

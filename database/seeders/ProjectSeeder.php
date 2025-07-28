@@ -6,8 +6,8 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+
 use Faker\Factory as Faker;
-use App\Models\Tenant;
 
 class ProjectSeeder extends Seeder
 {
@@ -17,8 +17,7 @@ class ProjectSeeder extends Seeder
     public function run(): void
     {
               $faker = Faker::create();
-               // ✅ Get an existing tenant (or create one if none exists)
-    $tenantId = Tenant::first()->id ?? Tenant::factory()->create()->id;
+                  
 
 
         $projects = [
@@ -36,12 +35,13 @@ class ProjectSeeder extends Seeder
 
         foreach ($projects as $project) {
             DB::table('projects')->insert([
-                'tenant_id' => $tenantId, // ✅ required
+                 'id' => Str::uuid(),
                 'project_name' => $project[0],
                 'description' => $project[1],
                 'status' => $faker->randomElement(['Pending', 'In Progress', 'Completed']),
                 'start_date' => $faker->dateTimeBetween('-6 months', 'now')->format('Y-m-d'),
                 'end_date' => $faker->boolean(50) ? $faker->dateTimeBetween('now', '+3 months')->format('Y-m-d') : null,
+                 
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

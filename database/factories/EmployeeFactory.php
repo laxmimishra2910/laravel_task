@@ -5,7 +5,8 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Department;
-use App\Models\Tenant;
+use App\Models\Company;
+
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Employee>
@@ -19,10 +20,13 @@ class EmployeeFactory extends Factory
      */
     public function definition(): array
     {
+           // ✅ Create a dummy company
+        // $company = Company::create([
+        //     'name' => 'Default Company',
+            
+        // ]);
         return [
             'id' => (string) Str::uuid(),
-             // ✅ Correct: creates a tenant and assigns its ID
-            'tenant_id' => Tenant::factory()->create()->id,
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
             'phone' => $this->faker->phoneNumber,
@@ -30,6 +34,7 @@ class EmployeeFactory extends Factory
             'salary' => $this->faker->randomFloat(2, 30000, 100000),
             'photo' => 'image/default.png', // ✅ Set a default image
              'department_id' => Department::factory(),
+            //  'company_id' => $company?->id, // make sure the employee belongs to an existing company
         ];
     } 
 

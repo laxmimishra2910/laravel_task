@@ -16,7 +16,11 @@
 
     <form action="{{ route('projects.update', $project->id) }}" method="POST">
         @csrf
-        @include('projects._form', ['project' => $project])
+            @method('PUT') {{-- This tells Laravel it's a PUT request --}}
+
+        @include('projects._form', ['data' => $project])
+
+        
     </form>
 </div>
 </x-app-layout>

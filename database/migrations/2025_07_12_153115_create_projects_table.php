@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
- Schema::create('projects', function (Blueprint $table) {
-            $table->id();
-             $table->unsignedBigInteger('tenant_id');
+  Schema::create('projects', function (Blueprint $table) {
+             $table->uuid('id')->primary(); 
              $table->string('project_name');
             $table->text('description')->nullable();
             $table->string('status')->default('Pending'); // Pending, In Progress, Completed
             $table->date('start_date');
             $table->date('end_date')->nullable();
             $table->timestamps();
-             $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
+              
         });
     }
     /**

@@ -5,13 +5,17 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CustomName\EmployeeController;
 use App\Http\Controllers\CustomName\ProjectController;
 use App\Http\Controllers\CustomName\FeedbackController;
+use App\Http\Controllers\CustomName\DashoardController;
+use App\Http\Controllers\TaskAssignmentController;
+
 
 // Public
 Route::get('/', fn () => view('welcome'));
 
-Route::get('/dashboard', fn () => view('dashboard'))
+Route::get('/dashboard', [DashoardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
 
 // Authenticated user profile
 Route::middleware('auth')->group(function () {
@@ -22,9 +26,16 @@ Route::middleware('auth')->group(function () {
 
 // Admin-only routes
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::resource('projects', ProjectController::class); // Full access
-   Route::resource('feedback', FeedbackController::class)->only(['index', 'create', 'store', 'destroy']);
+Route::resource('employees', EmployeeController::class);
+Route::resource('projects', ProjectController::class);
+Route::resource('feedback', FeedbackController::class)->only(['index', 'store', 'destroy']);
     Route::get('feedback-report', [FeedbackController::class, 'report'])->name('feedback.report');
+         Route::get('/employees/{id}', [EmployeeController::class, 'show'])->name('employees.show');
+         Route::get('/assign-task', [TaskAssignmentController::class, 'create'])->name('assign.task.create');
+
+Route::post('/assign-task', [TaskAssignmentController::class, 'store'])->name('assign.task.store');
+
+
 
 });
 

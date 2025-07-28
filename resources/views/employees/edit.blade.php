@@ -20,9 +20,10 @@
     <form action="{{ route('employees.update', $employee->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
-        @include('employees._form')
-        <button type="submit" class="btn btn-primary">Update</button>
-        <a href="{{ route('employees.index') }}" class="btn btn-secondary">Back</a>
+       
+     @include('employees._form', ['formFields' => $formFields , 'data' => $employee,])
+        <!-- <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{{ route('employees.index') }}" class="btn btn-secondary">Back</a> -->
     </form>
 </div>
 </x-app-layout>

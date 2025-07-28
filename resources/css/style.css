@@ -1,41 +1,11 @@
 
-/* Fix table styling */
-#employeeTable {
-  border-collapse: collapse;
-  width: 100%;
-  margin-top: 15px;
-}
-
-#employeeTable th,
-#employeeTable td {
-  text-align: left;
-  padding: 12px;
-  border: 1px solid #ddd;
-}
-
 #employeeTable tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-#employeeTable th {
-  background-color: #f2f2f2;
-  font-weight: bold;
-}
 
-/* Only make Actions column flex */
-#employeeTable td.actions {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
- .employee-photo {
-        width: 90px;
-        height: 75px;
-        object-fit:fill;
-        border-radius: 50%;
-        border: 2px solid #ddd;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+
+ /*  */
 
 /*projecttable*/
 
@@ -249,3 +219,95 @@ h2 {
     font-size: 14px;
   }
 }
+ 
+
+/*give the style for show blade file */
+
+body {
+    background: linear-gradient(to right, #e0eafc, #cfdef3);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.employee-card {
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.employee-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.25);
+}
+
+.employee-photo-container {
+    background: linear-gradient(120deg, #89f7fe, #66a6ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.employee-photo {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.employee-photo:hover {
+    transform: scale(1.1);
+}
+
+.employee-card h3 {
+    font-weight: 700;
+    font-size: 28px;
+    color: #333;
+}
+
+.employee-card p {
+    margin-bottom: 0.8rem;
+}
+
+.employee-card .badge {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    background-color: #007bff;
+    color: #fff;
+    font-weight: 500;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.employee-card ul {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #444;
+    padding-left: 0;
+    list-style: none;
+}
+
+.employee-card ul li::before {
+    content: "➤";
+    color: #0d6efd;
+    margin-right: 8px;
+}
+
+.employee-card .btn {
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.employee-card .btn:hover {
+    background-color: #0d6efd;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
+}
+

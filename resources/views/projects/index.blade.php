@@ -1,63 +1,36 @@
 <x-app-layout>
+    <div class="max-w-7xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-xl">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Projects</h2>
 
-<div class="container">
-    <h2><u>Projects</u></h2>
-   @if(in_array(auth()->user()->role, ['admin', 'employee']))
-    <a href="{{ route('projects.create') }}" class="btn btn-success mb-2">Create New Project</a>
-      <a href="{{ route('dashboard') }}" class="btn btn-secondary">Back</a>
-      @endif
-    <table id='projectTable' >
-        <thead>
-            <tr>
-               
-                <th>Project Name</th>
-                <th>Status</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                 <th>Employees</th> <!-- ✅ Added -->
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($projects as $project)
-            <tr>
-                 
-                <td>{{ $project->project_name }}</td>
-                <td>{{ $project->status }}</td>
-                <td>{{ $project->start_date }}</td>
-                <td>{{ $project->end_date }}</td>
-                <td>
-                @foreach($project->employees as $emp)
-                    <span class="badge bg-info">{{ $emp->name }}</span>
-                @endforeach
-                </td>
-                <td class="actions">
-                    <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-warning  btn-sm ">Edit</a>
-                    <form action="{{ route('projects.destroy', $project->id) }}" method="POST" class="d-inline">
-                        @csrf @method('DELETE')
-                        <button onclick="return confirm('Delete project?')" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+            @if(in_array(auth()->user()->role, ['admin', 'employee']))
+                <div class="flex gap-2">
+                    <a href="{{ route('projects.create') }}" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                        Create New Project
+                    </a>
+                    <a href="{{ route('dashboard') }}" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">
+                        Back
+                    </a>
+                </div>
+            @endif
+        </div>
 
-<!-- jQuery & DataTables Scripts -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
-<script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-
-<script>
-    $(document).ready(function () {
-        $('#projectTable').DataTable({
-            paging: true,
-            searching: true,
-            ordering: true,
-            responsive: true
-        });
-    });
-</script>
-
+        <div class="overflow-x-auto">
+            <table id="projectTable" class="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow" data-url="{{ route('projects.index') }}">
+                <thead>
+                    <tr class="bg-gray-100 dark:bg-gray-700 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">
+                        <th class="px-6 py-3">Project Name</th>
+                        <th class="px-6 py-3">Status</th>
+                        <th class="px-6 py-3">Start Date</th>
+                        <th class="px-6 py-3">End Date</th>
+                        <th class="px-6 py-3">Employees</th>
+                        <th class="px-6 py-3">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm text-gray-700 dark:text-gray-300">
+                    <!-- DataTables will populate this via Ajax -->
+                </tbody>
+            </table>
+        </div>
+    </div>
 </x-app-layout>

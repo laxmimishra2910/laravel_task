@@ -20,5 +20,7 @@
         @csrf
         @include('projects._form')
     </form>
+   
+
 </div>
 </x-app-layout>

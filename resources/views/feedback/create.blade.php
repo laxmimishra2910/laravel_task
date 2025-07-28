@@ -22,7 +22,7 @@
 
     <form action="{{ route('feedback.store') }}" method="POST">
         @csrf
-        @include('feedback._form')
+        @include('feedback._form', ['formFields' => $formFields])
     </form>
 </div>
 </x-app-layout> 

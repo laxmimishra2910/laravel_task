@@ -2,15 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Employee;
-use App\Models\Tenant;
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Database\Seeders\UserSeeder;
-use App\Models\Feedback;use Spatie\Permission\Models\Role;
-
-
+use App\Models\Employee;
+use App\Models\User;
+use App\Models\Feedback;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,23 +14,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-         $this->call([
-        RoleSeeder::class,
-        UserSeeder::class,
-        ProjectSeeder::class,
-    ]);
-   Tenant::factory()->count(3)->create()->each(function ($tenant) {
-    app()->instance('tenant_id', $tenant->id); // ✅ bind manually
-    Employee::factory()->count(10)->create();
-});
+        // Make sure CompanySeeder runs first
+        $this->call([
+            RoleSeeder::class,
+            // CompanySeeder::class, // ⬅️ Add this before UserSeeder
+            UserSeeder::class,
+            ProjectSeeder::class,
+        ]);
 
-    Feedback::factory()->count(500)->create();
-    
-    // ✅ Attach employees to projects
-    $this->call([
-        EmployeeProjectSeeder::class,
-    ]);
+        Employee::factory()->count(500)->create();
+        Feedback::factory()->count(500)->create();
 
- 
+        $this->call([
+            EmployeeProjectSeeder::class,
+        ]);
     }
 }

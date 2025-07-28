@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('tenants', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
+        Schema::table('employee_project', function (Blueprint $table) {
+              $table->timestamp('assigned_at')->nullable();
+        $table->unsignedBigInteger('assigned_by')->nullable();
         });
     }
 
@@ -23,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tenants');
+        Schema::table('employee_project', function (Blueprint $table) {
+            //
+        });
     }
 };

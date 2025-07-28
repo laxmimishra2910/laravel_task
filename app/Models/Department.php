@@ -15,7 +15,7 @@ class Department extends Model
     use HasFactory;
     protected $keyType = 'string';
 public $incrementing = false;
-      protected $fillable =['id', 'name', 'tenant_id'];
+      protected $fillable =['name'];
 
       protected static function booted()
 {
@@ -24,10 +24,7 @@ public $incrementing = false;
     });
 }
 
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class);
-    }
+  
 
     public function employees(): HasMany
     {

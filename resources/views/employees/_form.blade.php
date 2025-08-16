@@ -6,6 +6,7 @@
             <div class="mb-4">
                 <label for="{{ $field['name'] }}" class="block text-sm font-medium text-gray-700">
                     {{ $field['label'] }}
+                    @if($field['required'] ?? false) <span class="text-red-500">*</span> @endif
                 </label>
 
                 {{-- SELECT FIELD --}}
@@ -15,15 +16,21 @@
                         $selectedValue = old($field['name'], $data[$field['name']] ?? '');
                     @endphp
 
-                   <select name="department_id" class="form-select" required>
-    <option value="">-- Select Department --</option>
-    @foreach($departments as $department)
-        <option value="{{ $department->id }}" {{ old('department_id') == $department->id ? 'selected' : '' }}>
-            {{ $department->name }}
-        </option>
-    @endforeach
-</select>
-
+                    <select name="department_id" id="department_id" class="form-select" required>
+        <option value="">-- Select Department --</option>
+        @foreach($departments as $department)
+            <option value="{{ $department->id }}" 
+                {{ $employee->department->first()->id == $department->id ? 'selected' : '' }}>
+                {{ $department->name }}
+            </option>
+        @endforeach
+    </select>
+                {{-- TEXTAREA FIELD --}}
+                @elseif ($field['type'] === 'textarea')
+                    <textarea name="{{ $field['name'] }}" id="{{ $field['name'] }}"
+                              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                              placeholder="{{ $field['placeholder'] ?? '' }}"
+                              {{ $field['required'] ? 'required' : '' }}>{{ old($field['name'], $data[$field['name']] ?? '') }}</textarea>
 
                 {{-- FILE FIELD --}}
                 @elseif ($field['type'] === 'file')

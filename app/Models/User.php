@@ -7,13 +7,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
- use App\Models\Scopes\TenantScope;
+ use App\Models\Profile;
+ use App\Traits\HasAllRelations;
+ use App\Relationships\HasOneThroughPivot;
 
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable , HasRoles;
+    use HasFactory, Notifiable , HasRoles,HasAllRelations;
 
     /**
      * The attributes that are mass assignable.
@@ -27,9 +29,9 @@ class User extends Authenticatable
        
 
     ];
-    protected $attributes = [
-    'role' => 'employee',
-];
+//     protected $attributes = [
+//     'role' => 'employee',
+// ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -62,6 +64,18 @@ class User extends Authenticatable
     });
    
 }
+ public function profile()
+    {
+        return new HasOneThroughPivot(
+            app(Profile::class)->newQuery(),
+            $this,
+            'user_profile',
+            'user_id',
+            'profile_id'
+        );
+    }
+
+
 
 
 }

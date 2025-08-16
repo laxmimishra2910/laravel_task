@@ -9,21 +9,23 @@ use Illuminate\Support\Str;
 use App\Traits\LogsModelEvents;
  use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-
+use App\Traits\HasAllRelations;
 
 
 class Feedback extends Model
 {       
-    use HasFactory,LogsModelEvents,HasUuids ;
+    use HasFactory,LogsModelEvents,HasUuids,HasAllRelations ;
     
      protected $keyType = 'string'; // Because UUIDs are strings
     public $incrementing = false;  // UUIDs are not auto-incremented
       
-        protected $fillable = ['employee_id','client_name', 'email', 'message', 'rating' ];
-        public function employee()
-{
-    return $this->belongsTo(Employee::class);
-}
-
+        protected $fillable = ['client_name', 'email', 'message', 'rating' ];
+        
+         public function employee()
+    {
+        return $this->belongsToMany(\App\Models\Employee::class, 'employee_feedback', 'feedback_id', 'employee_id')
+                    ->withPivot('id')
+                    ->withTimestamps();
+    }
 
 }

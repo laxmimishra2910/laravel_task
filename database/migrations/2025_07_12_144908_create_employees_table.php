@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('position');
             $table->decimal('salary', 10, 2);
             $table->string('photo')->nullable(); // Optional image field
-            $table->uuid('department_id'); // ✅ Add the column first
+        
             
             $table->softDeletes(); // Adds `deleted_at` column
             $table->timestamps();

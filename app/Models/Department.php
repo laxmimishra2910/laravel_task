@@ -1,38 +1,36 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Database\Factories\DepartmentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
-
-
+use App\Traits\HasAllRelations;
 
 class Department extends Model
 {
-    use HasFactory;
+    use HasFactory, HasAllRelations;
+    
     protected $keyType = 'string';
-public $incrementing = false;
-      protected $fillable =['name'];
+    public $incrementing = false;
+    protected $fillable = ['name'];
 
-      protected static function booted()
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->id = (string) Str::uuid();
+        });
+    }
+
+ // In App\Models\Department
+public function employees()
 {
-    static::creating(function ($model) {
-        $model->id = (string) Str::uuid();
-    });
+    return $this->belongsToMany(Employee::class, 'department_employee', 'department_id', 'employee_id')
+               ->withTimestamps();
 }
 
-  
-
-    public function employees(): HasMany
+    // Add this accessor for counting employees
+    public function getEmployeesCountAttribute()
     {
-        return $this->hasMany(Employee::class);
+        return $this->employees()->count();
     }
-       protected static function newFactory()
-    {
-        return DepartmentFactory::new();
-    }
-
 }

@@ -8,34 +8,43 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\User;
+use App\Models\Profile;
+
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
+
     public function edit(Request $request): View
     {
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $request->user()->load('profile'),
         ]);
     }
 
-    /**
-     * Update the user's profile information.
-     */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $user->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
+
+        // Handle profile
+        if ($user->profile) {
+            $user->profile->update($request->only(['phone', 'address', 'status']));
+        } else {
+            $profile = Profile::create($request->only(['phone', 'address', 'status']));
+            $user->profile()->associateThroughPivot($profile);
+        }
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
+
+    // ... destroy method ...
 
     /**
      * Delete the user's account.
@@ -57,4 +66,6 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
-}
+
+ 
+    }

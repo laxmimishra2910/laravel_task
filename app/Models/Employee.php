@@ -1,47 +1,52 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Traits\LogsModelEvents;
-use App\Models\Scopes\TenantScope;
-
-
+use App\Traits\HasAllRelations;
 
 class Employee extends Model
 {
-      use HasFactory, SoftDeletes, LogsModelEvents;
+    use HasFactory, SoftDeletes, LogsModelEvents, HasAllRelations;
 
     public $incrementing = false;
     protected $keyType = 'string';
+    protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'name', 'email', 'phone', 'position', 'salary', 'photo','department_id',
+        'name', 'email', 'phone', 'position', 'salary', 'photo',
     ];
-   
-    public function department(): BelongsTo
-    {
-        return $this->belongsTo(Department::class);
-    }
+   // In App\Models\Employee
 
-  public function projects()
+// In App\Models\Employee
+
+public function department()
 {
-    return $this->belongsToMany(Project::class, 'employee_project', 'employee_id', 'project_id')
-        ->withPivot(['assigned_at', 'assigned_by']) // Optional: if you have these fields
-        ->withTimestamps(); // Optional: if using created_at/updated_at
+    return $this->belongsToMany(Department::class, 'department_employee', 'employee_id', 'department_id')
+        ->withPivot(['id', 'created_at', 'updated_at'])
+        ->take(1);
 }
 
-
-    public function feedbacks()
+public function assignToDepartment($departmentId)
 {
-    return $this->hasMany(Feedback::class);
+    // Use syncWithoutDetaching to maintain other relationships if they exist
+    $this->department()->syncWithoutDetaching([$departmentId]);
+    
+}
+// Add this accessor to get the first department directly
+public function getDepartmentAttribute()
+{
+    return $this->department()->first();
+
 }
 
-
+public function projects()
+{
+    return $this->belongsToMany(Project::class, 'employee_project')
+        ->withPivot(['assigned_at', 'assigned_by', 'id'])
+        ->withTimestamps();
+}
 
 }

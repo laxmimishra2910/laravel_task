@@ -6,84 +6,58 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Feedback;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Employee;
-use Illuminate\Support\Facades\Config;
-use App\Http\Requests\StoreFeedbackRequest;
+use App\Interfaces\FeedbackRepositoryInterface;
 
 class FeedbackController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $feedbackRepo;
+
+    public function __construct(FeedbackRepositoryInterface $feedbackRepo)
+    {
+        $this->feedbackRepo = $feedbackRepo;
+    }
+
     public function index(Request $request)
     {
-        // Optional: Role-based access check
-        if (!has_role('admin', 'employee')) {
-            return view('unauthorized');
-        }
-
         if ($request->ajax()) {
-            $data = Feedback::with('employee')->latest()->get(); // ✅ Eager load
+            $data = $this->feedbackRepo->all();
 
             return DataTables::of($data)
-                ->addColumn('action', function($feedback){
-    return '<form action="' . route('feedback.destroy', $feedback->id) . '" method="POST" onsubmit="return confirm(\'Are you sure?\')" style="display:inline;">'
-        . csrf_field()
-        . method_field('DELETE')
-        . '<button type="submit" class="text-red-600 hover:underline">Delete</button>'
-        . '</form>';
-})
-
-                ->addColumn('employee_name', function($row) {
-                    return $row->employee ? $row->employee->name : 'N/A';
+                ->addIndexColumn()
+                ->addColumn('employee_name', function ($row) {
+                    // If many-to-many, show comma-separated names
+                    return $row->employee->pluck('name')->join(', ') ?: 'N/A';
+                })
+                ->addColumn('action', function ($row) {
+                    return view('feedback.partials.action', [
+                        'baseRoute' => 'feedbacks',
+                        'feedback' => $row,
+                    ])->render();
                 })
                 ->rawColumns(['action'])
                 ->make(true);
         }
 
-        $statuses = config('custom.feedback_statuses');
-        $defaultMessage = config('custom.default_feedback_message');
-        $employees = Employee::all(); 
-        $formFields = config('custom.feedback_form'); // ✅ Get the form config
-
-        return view('feedback.index', compact('statuses', 'defaultMessage', 'employees', 'formFields'));
+        return view('feedback.index');
     }
 
-    // ✅ Moved outside index
-    public function create()
+    public function store(Request $request)
     {
-        if (!has_role('admin', 'employee')) {
-            return view('unauthorized');
-        }
-
-        $statuses = config('custom.feedback_statuses');
-        $defaultMessage = config('custom.default_feedback_message');
-        $employees = Employee::all();
-        $formFields = config('custom.feedback_form');
-
-        return view('feedback.create', compact('statuses', 'defaultMessage', 'employees', 'formFields'));
+        $this->feedbackRepo->create($request->all());
+        return redirect()->route('feedbacks.index')->with('success', 'Feedback submitted.');
     }
 
-    public function store(StoreFeedbackRequest $request)
+    public function destroy($id)
     {
-        $validated = $request->validated();
-        Feedback::create($validated);
-
-        return redirect()->route('feedback.index')->with('success', 'Feedback submitted!');
+        $this->feedbackRepo->delete($id);
+        return response()->json(['success' => 'Feedback deleted successfully.']);
     }
+public function report()
+{
+    $report = $this->feedbackRepo->report(); // calls your repository method
 
-    public function destroy(Feedback $feedback)
-    {
-        $feedback->delete();
-        return redirect()->route('feedback.index')->with('success', 'Feedback deleted!');
-    }
+    return view('feedback.report', compact('report'));
+}
 
-    public function report()
-    {
-        $report = Feedback::selectRaw('rating, COUNT(*) as total')
-                    ->groupBy('rating')
-                    ->pluck('total', 'rating');
-        return view('feedback.report', compact('report'));
-    }
+
 }

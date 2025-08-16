@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Jobs\UpdateProfileStatus;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -28,6 +29,15 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+           // Get logged-in user
+    $user = Auth::user();
+
+    // Dispatch job to update profile status
+   if ($user->profile) {
+    $status = $user->role === 'admin' ? 'inactive' : 'active';
+    UpdateProfileStatus::dispatch([$user->profile->id], $status);
+}
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
@@ -36,11 +46,18 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+           $user = Auth::user();
+
+    if ($user && $user->profile) {
+        UpdateProfileStatus::dispatch([$user->profile->id], 'offline');
+    }
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+        
 
         return redirect('/');
     }

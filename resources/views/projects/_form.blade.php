@@ -12,7 +12,9 @@
                 @if ($field['type'] === 'select')
                     @php
                         $options = $field['options'] ?? [];
+                        // Safely get selected value with array check
                         $selectedValue = old($field['name'], $data[$field['name']] ?? '');
+                        $selectedValue = is_array($selectedValue) ? '' : $selectedValue;
                     @endphp
 
                     <select name="{{ $field['name'] }}" id="{{ $field['name'] }}"
@@ -21,27 +23,35 @@
                         <option value="">-- Select {{ $field['label'] }} --</option>
                         @foreach($options as $optionValue => $optionLabel)
                             <option value="{{ $optionValue }}" {{ $selectedValue == $optionValue ? 'selected' : '' }}>
-                                {{ $optionLabel }}
+                                {{ is_array($optionLabel) ? json_encode($optionLabel) : $optionLabel }}
                             </option>
                         @endforeach
                     </select>
 
                 {{-- TEXTAREA --}}
                 @elseif ($field['type'] === 'textarea')
+                    @php
+                        $value = old($field['name'], $data[$field['name']] ?? '');
+                        $value = is_array($value) ? json_encode($value) : $value;
+                    @endphp
                     <textarea name="{{ $field['name'] }}" id="{{ $field['name'] }}"
                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                               placeholder="{{ $field['placeholder'] ?? '' }}"
-                              {{ $field['required'] ? 'required' : '' }}>{{ old($field['name'], $data[$field['name']] ?? '') }}</textarea>
+                              {{ $field['required'] ? 'required' : '' }}>{{ $value }}</textarea>
 
                 {{-- OTHER INPUTS --}}
                 @else
-                <input
+                    @php
+                        $value = old($field['name'], $data[$field['name']] ?? '');
+                        $value = is_array($value) ? json_encode($value) : $value;
+                    @endphp
+                    <input
                         type="{{ $field['type'] }}"
                         name="{{ $field['name'] }}"
                         id="{{ $field['name'] }}"
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                         placeholder="{{ $field['placeholder'] ?? '' }}"
-                        value="{{ old($field['name'], $data[$field['name']] ?? '') }}"
+                        value="{{ $value }}"
                         {{ $field['required'] ? 'required' : '' }}
                         @if(isset($field['step'])) step="{{ $field['step'] }}" @endif
                     >

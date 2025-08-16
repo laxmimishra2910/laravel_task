@@ -30,11 +30,11 @@ class UpdateProjectRequest extends FormRequest
     'string',
     'min:3',
     'max:255',
-    Rule::unique('projects', 'project_name')->ignore($projectId),
+   
 ],
 
             'description' => 'nullable|string|min:10|max:1000',
-            'status' => 'required|string|in: Pending,  In Process,Completed',
+            'status' => 'required|string|in:Pending,In Process,Completed',
             'start_date' => 'required|date|before_or_equal:today',
             'end_date' => 'nullable|date|after_or_equal:start_date',
         ];
@@ -49,13 +49,13 @@ class UpdateProjectRequest extends FormRequest
             'project_name.required' => 'Project name is required.',
             'project_name.min' => 'Project name must be at least 3 characters.',
             'project_name.max' => 'Project name must not exceed 255 characters.',
-            'project_name.unique' => 'This project name is already in use.',
+            
             
             'description.min' => 'Description must be at least 10 characters.',
             'description.max' => 'Description must not exceed 1000 characters.',
 
             'status.required' => 'Project status is required.',
-            'status.in' => 'Status must be one of:  Pending,  In Process,Completed',
+            'status.in' => 'Status must be one of:  Pending,In Process,Completed',
 
             'start_date.required' => 'Start date is required.',
             'start_date.before_or_equal' => 'Start date cannot be in the future.',

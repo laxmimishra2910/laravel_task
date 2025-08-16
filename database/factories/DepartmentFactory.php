@@ -3,19 +3,11 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Department>
- */
 class DepartmentFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-
-      protected $model = \App\Models\Department::class;
+    protected $model = \App\Models\Department::class;
 
     public function definition(): array
     {
@@ -31,8 +23,10 @@ class DepartmentFactory extends Factory
             'UI/UX Design',
             'Product Management'
         ];
+        
         return [
-               'name' => $this->faker->randomElement($itDepartments),
+            'id' => (string) Str::uuid(),
+            'name' => $this->faker->unique()->randomElement($itDepartments),
         ];
     }
 }

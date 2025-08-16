@@ -2,11 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-
 use Faker\Factory as Faker;
 
 class ProjectSeeder extends Seeder
@@ -16,9 +14,10 @@ class ProjectSeeder extends Seeder
      */
     public function run(): void
     {
-              $faker = Faker::create();
-                  
+        $faker = Faker::create();
 
+        // Get all employee IDs
+        $employeeIds = DB::table('employees')->pluck('id')->toArray();
 
         $projects = [
             ['Website Redesign', 'Revamping an outdated company website to improve UX/UI and SEO.'],
@@ -34,17 +33,33 @@ class ProjectSeeder extends Seeder
         ];
 
         foreach ($projects as $project) {
+            $projectId = Str::uuid();
+
+            // Insert project
             DB::table('projects')->insert([
-                 'id' => Str::uuid(),
+                'id' => $projectId,
                 'project_name' => $project[0],
                 'description' => $project[1],
-                'status' => $faker->randomElement(['Pending', 'In Progress', 'Completed']),
+                'status' => $faker->randomElement(['Pending', 'In Process', 'Completed']),
                 'start_date' => $faker->dateTimeBetween('-6 months', 'now')->format('Y-m-d'),
                 'end_date' => $faker->boolean(50) ? $faker->dateTimeBetween('now', '+3 months')->format('Y-m-d') : null,
-                 
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
+            // Assign random employees to this project
+            if (!empty($employeeIds)) {
+                $assignedEmployees = $faker->randomElements($employeeIds, rand(1, 3));
+
+                foreach ($assignedEmployees as $employeeId) {
+                    DB::table('employee_project')->insert([
+                        'employee_id' => $employeeId,
+                        'project_id' => $projectId,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
         }
     }
 }

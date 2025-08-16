@@ -9,11 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  use App\Traits\LogsModelEvents;
  use App\Models\EmployeeProject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\HasAllRelations;
 
 class Project extends Model
 {
   
-    use HasFactory,LogsModelEvents;
+    use HasFactory,LogsModelEvents,HasAllRelations;
 
     public $incrementing = false; // ✅ Disable auto-increment
     protected $keyType = 'string'; // ✅ UUIDs are strings
@@ -38,15 +39,13 @@ class Project extends Model
        
      
     ];
-
-  public function employees()
+public function employees()
 {
-    return $this->belongsToMany(Employee::class, 'employee_project', 'project_id', 'employee_id')
-        ->withPivot(['assigned_at', 'assigned_by'])
+    return $this->belongsToMany(Employee::class, 'employee_project')
+        ->withPivot(['assigned_at', 'assigned_by', 'id'])
         ->withTimestamps();
 }
-
-
+ 
     
     
 }

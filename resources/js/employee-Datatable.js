@@ -1,29 +1,40 @@
 document.addEventListener('DOMContentLoaded', function() {
-    $('#employeeTable').DataTable({
+    let table = $('#employeeTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: {
-            url: $('#employeeTable').data('url'),
-            type: 'GET',
-            error: function(xhr, error, thrown) {
-                console.error('AJAX Error:', xhr.responseText);
-                alert('Failed to load data. Please check console for details.');
-            }
-        },
+        ajax: $('#employeeTable').data('url'),
         columns: [
+            {
+                data: 'id',
+                render: function (data) {
+                    return `<input type="checkbox" class="employee-checkbox" value="${data}">`;
+                },
+                orderable: false,
+                searchable: false
+            },
             { data: 'photo', name: 'photo', orderable: false, searchable: false },
             { data: 'name', name: 'name' },
             { data: 'email', name: 'email' },
-            { data: 'department', name: 'department.name' }, // Changed from department.name to department
-            { data: 'status', name: 'status', orderable: false, searchable: false },
+            { data: 'department', name: 'department.name' },
+            { data: 'position', name: 'position' },
+            { data: 'salary', name: 'salary' },
+            { data: 'status', name: 'status' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ],
         responsive: true,
         language: {
             search: "_INPUT_",
-            searchPlaceholder: "Search employees...",
+            searchPlaceholder: "Search employees..."
         }
     });
+
+    // Select All
+    $('#selectAll').on('click', function() {
+        $('.employee-checkbox').prop('checked', this.checked);
+    });
+
+
+
 
 
 

@@ -16,15 +16,14 @@
                         $selectedValue = old($field['name'], $data[$field['name']] ?? '');
                     @endphp
 
-                    <select name="department_id" id="department_id" class="form-select" required>
-        <option value="">-- Select Department --</option>
-        @foreach($departments as $department)
-            <option value="{{ $department->id }}" 
-                {{ $employee->department->first()->id == $department->id ? 'selected' : '' }}>
-                {{ $department->name }}
-            </option>
-        @endforeach
-    </select>
+         <select name="department_id" id="department_id" class="form-select" required>
+    <option value="">-- Select Department --</option>
+    @foreach($departments as $department)
+        <option value="{{ $department->id }}" {{ $selectedValue == $department->id ? 'selected' : '' }}>
+            {{ $department->name }}
+        </option>
+    @endforeach
+</select>
                 {{-- TEXTAREA FIELD --}}
                 @elseif ($field['type'] === 'textarea')
                     <textarea name="{{ $field['name'] }}" id="{{ $field['name'] }}"

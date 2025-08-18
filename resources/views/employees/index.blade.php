@@ -9,24 +9,30 @@
            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
             Add Employee
         </a>
+                <div id="app">
+    <employee-mass-update></employee-mass-update>
+</div>
         <a href="{{ route('employees.trashed') }}"
            class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">
             🗑️ View Trashed Employees
         </a>
+
     </div>
 </div>
 
 
 
-
-        <div class="overflow-x-auto">
+<div class="overflow-x-auto">
             <table class="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow"  id="employeeTable" data-url="{{ route('employees.index') }}">
                 <thead>
                     <tr class="bg-gray-100 dark:bg-gray-700 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">
+                       <th><input type="checkbox" id="selectAll"></th>
                         <th class="px-6 py-3">Photo</th>
                         <th class="px-6 py-3">Name</th>
                         <th class="px-6 py-3">Email</th>
                         <th class="px-6 py-3">Department</th>
+                        <th class="px-6 py-3">Position</th>
+                        <th class="px-6 py-3">Salary</th>
                         <th class="px-6 py-3">Status</th>
                         <th class="px-6 py-3">Actions</th>
                     </tr>
@@ -58,7 +64,7 @@
                 </span>
             @endif
                             </td>
-                            <td class="px-6 py-4 action">
+                            <td >
                                 <a href="{{ route('employees.show', $emp->id) }}" class="text-blue-500 hover:underline">View</a> |
                                 <a href="{{ route('employees.edit', $emp->id) }}" class="text-yellow-500 hover:underline">Edit</a> |
                                 <form action="{{ route('employees.destroy', $emp->id) }}" method="POST" class="inline">

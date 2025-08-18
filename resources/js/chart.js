@@ -80,5 +80,10 @@
         projectChartTypeSelector.addEventListener('change', (e) => {
             renderProjectChart(e.target.value);
         });
+
+
+
+
+        
     });
 

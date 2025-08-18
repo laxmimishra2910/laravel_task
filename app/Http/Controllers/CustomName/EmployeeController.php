@@ -11,6 +11,8 @@ use App\Jobs\SendWelcomeEmailJob;
 use App\Interfaces\EmployeeRepositoryInterface;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Log;
+use App\Jobs\MassUpdateEmployeeStatus;
+
 
 
 class EmployeeController extends Controller
@@ -116,6 +118,7 @@ public function update(UpdateEmployeeRequest $request, $id)
     }
 
     return redirect()->route('employees.index')->with('success', 'Employee updated.');
+   
 }
     public function destroy($id)
     {
@@ -134,4 +137,43 @@ public function update(UpdateEmployeeRequest $request, $id)
         $this->employeeRepo->forceDelete($id);
         return redirect()->route('employees.trashed')->with('success', 'Employee permanently deleted.');
     }
+
+public function massUpdate(Request $request)
+{
+    try {
+        $ids = $request->input('ids');
+        $column = $request->input('column');
+        $value = $request->input('value');
+
+        if (empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No employees selected.'
+            ], 400);
+        }
+
+        if (empty($column) || is_null($value)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Column and value are required.'
+            ], 400);
+        }
+
+        // Dispatch the job
+        MassUpdateEmployeeStatus::dispatch($ids, $column, $value);
+
+        // Return success without any error message
+        return response()->json([
+            'success' => true,
+            'message' => 'Employees updated successfully.'
+        ]);
+
+    } catch (\Exception $e) {
+        // Only return error if something goes wrong
+        return response()->json([
+            'success' => false,
+            'message' => 'Something went wrong. Please try again.'
+        ], 500);
+    }
+}
 }

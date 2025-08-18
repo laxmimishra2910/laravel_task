@@ -43,6 +43,10 @@ Route::middleware(['auth', 'role:admin,hr'])->group(function () {
     Route::resource('feedback', FeedbackController::class)->only(['index', 'create', 'store', 'destroy']);
     Route::get('feedback-report', [FeedbackController::class, 'report'])->name('feedback.report');
 
+   Route::post('/employees/mass-update', [EmployeeController::class, 'massUpdate'])
+    ->name('employees.massUpdate');
+
+
     Route::get('/employees/trashed', [EmployeeController::class, 'trashed'])->name('employees.trashed');
     Route::post('/employees/restore/{id}', [EmployeeController::class, 'restore'])->name('employees.restore');
     Route::delete('/employees/force-delete/{id}', [EmployeeController::class, 'forceDelete'])->name('employees.forceDelete');

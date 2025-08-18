@@ -53,10 +53,10 @@ public function all()
                 : '<span class="bg-red-100 text-red-800 px-2 py-1 rounded-full">Inactive</span>';
         })
         ->addColumn('actions', function($employee) {
-            $actions = '<a href="'.route('employees.show', $employee->id).'" class="text-blue-500 mr-2">View</a>';
+            $actions = '<a href="'.route('employees.show', $employee->id).'" class="text-blue-500 ">View |</a>';
 
             if (!$employee->trashed()) {
-                $actions .= '<a href="'.route('employees.edit', $employee->id).'" class="text-green-500 mr-2">Edit</a>';
+                $actions .= '<a href="'.route('employees.edit', $employee->id).'" class="text-yellow-500">Edit |</a>';
                 $actions .= '
                     <form action="'.route('employees.destroy', $employee->id).'" method="POST" class="inline">
                         '.csrf_field().method_field('DELETE').'

@@ -26,7 +26,7 @@
             <table class="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow"  id="employeeTable" data-url="{{ route('employees.index') }}">
                 <thead>
                     <tr class="bg-gray-100 dark:bg-gray-700 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">
-                       <th><input type="checkbox" id="selectAll"></th>
+                       <th><input type="checkbox" id="select-all"></th>
                         <th class="px-6 py-3">Photo</th>
                         <th class="px-6 py-3">Name</th>
                         <th class="px-6 py-3">Email</th>

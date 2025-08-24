@@ -30,8 +30,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Select All
     $('#selectAll').on('click', function() {
-        $('.employee-checkbox').prop('checked', this.checked);
+        $('.employee-checkbox').prop('checked', this.checked).trigger('change');
     });
+
+
+
+
 
 
 

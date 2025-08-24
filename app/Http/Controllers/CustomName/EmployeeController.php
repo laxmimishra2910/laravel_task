@@ -137,43 +137,18 @@ public function update(UpdateEmployeeRequest $request, $id)
         $this->employeeRepo->forceDelete($id);
         return redirect()->route('employees.trashed')->with('success', 'Employee permanently deleted.');
     }
-
 public function massUpdate(Request $request)
 {
-    try {
-        $ids = $request->input('ids');
-        $column = $request->input('column');
-        $value = $request->input('value');
+    $ids = $request->ids;
+    $column = $request->column;
+    $value = $request->value;
 
-        if (empty($ids)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No employees selected.'
-            ], 400);
-        }
-
-        if (empty($column) || is_null($value)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Column and value are required.'
-            ], 400);
-        }
-
-        // Dispatch the job
-        MassUpdateEmployeeStatus::dispatch($ids, $column, $value);
-
-        // Return success without any error message
-        return response()->json([
-            'success' => true,
-            'message' => 'Employees updated successfully.'
-        ]);
-
-    } catch (\Exception $e) {
-        // Only return error if something goes wrong
-        return response()->json([
-            'success' => false,
-            'message' => 'Something went wrong. Please try again.'
-        ], 500);
+    if (!in_array($column, ['position', 'salary'])) {
+        return response()->json(['success' => false, 'message' => 'Invalid column']);
     }
+
+    \App\Models\Employee::whereIn('id', $ids)->update([$column => $value]);
+
+    return response()->json(['success' => true, 'message' => 'Updated successfully']);
 }
 }

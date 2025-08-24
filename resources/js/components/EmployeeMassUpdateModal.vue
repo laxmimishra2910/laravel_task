@@ -3,10 +3,12 @@
     <div class="bg-white dark:bg-gray-800 p-6 rounded shadow-lg w-[400px]">
       <h2 class="text-lg font-bold mb-4 text-gray-800 dark:text-white">Mass Update Employees</h2>
       <form @submit.prevent="submitUpdate">
+        
         <!-- Select Column -->
         <div class="mb-4">
           <label class="block mb-2 font-semibold">Select Column</label>
           <select v-model="column" class="w-full border p-2 rounded">
+            <option disabled value="">-- Select column --</option>
             <option value="position">Position</option>
             <option value="salary">Salary</option>
           </select>
@@ -63,14 +65,12 @@ async function submitUpdate() {
   try {
     const response = await axios.post("/employees/mass-update", {
       ids: props.selectedIds,
-      column: column.value,  // send which column
-      value: value.value     // send the new value
+      column: column.value,
+      value: value.value
     });
 
     if (response.data.success) {
-     
-      emits("updated"); // reload DataTable
-      emits("close");
+      emits("updated");
     } else {
       alert("Failed: " + response.data.message);
     }

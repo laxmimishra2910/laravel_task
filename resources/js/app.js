@@ -13,4 +13,3 @@ import EmployeeMassUpdate from "./components/EmployeeMassUpdate.vue";
 const app = createApp({});
 app.component("employee-mass-update", EmployeeMassUpdate);
 app.mount("#app");
-
